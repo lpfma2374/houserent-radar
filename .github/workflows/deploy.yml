@@ -35,4 +35,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
       - name: Resumo
-        run: echo "Deploy: ${{ steps.deployment.outputs.preview-url }}${{ steps.deployment.outputs.deployment-url }}"
+        run: 'echo "Deploy: ${{ steps.deployment.outputs.preview-url }}${{ steps.deployment.outputs.deployment-url }}"'
