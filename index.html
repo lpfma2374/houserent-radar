@@ -163,9 +163,10 @@
   </footer>
 </div>
 
+<script src="js/shared.js"></script>
 <script>
+const { esc, formatPrice, formatSource, renderCard, renderLogItem } = window.HouseRentShared;
 const $ = id => document.getElementById(id);
-const esc = s => String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let SOURCES = [];
 
 async function load() {
@@ -188,14 +189,14 @@ async function load() {
     SOURCES = d.sources;
     for (const s of d.sources) {
       const o = document.createElement("option");
-      o.value = s; o.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+      o.value = s; o.textContent = formatSource(s);
       $("f-src").appendChild(o);
     }
   }
   $("s-total").textContent = d.stats.total;
   $("s-coastal").textContent = d.stats.coastal;
-  $("s-avg").textContent = "€" + d.stats.avg_price.toLocaleString("pt-PT");
-  $("s-min").textContent = "€" + d.stats.min_price.toLocaleString("pt-PT");
+  $("s-avg").textContent = formatPrice(d.stats.avg_price);
+  $("s-min").textContent = formatPrice(d.stats.min_price);
   $("s-arch").textContent = d.stats.archived;
   const showingArch = $("f-arch").checked;
   $("count-sub").textContent = showingArch
@@ -205,35 +206,9 @@ async function load() {
   if (!d.listings.length) {
     list.innerHTML = '<div class="empty">Nenhum anúncio corresponde aos filtros actuais.</div>';
   } else {
-    list.innerHTML = d.listings.map(x => {
-      const tags = [
-        x.archived ? '<span class="tag arch">Archived</span>' : "",
-        x.near_sea ? '<span class="tag sea">🌊 Junto ao mar</span>' : "",
-        x.has_pool ? '<span class="tag pool">🏊 Piscina</span>' : "",
-        x.has_purchase_option ? '<span class="tag buy">🔑 Opção de compra</span>' : ""
-      ].join("");
-      return `<div class="item">
-        <div>
-          <div class="src">${esc(x.source)} · ${esc(x.typology)} · ${esc(x.sent_date)}</div>
-          <div class="title"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title || x.url)}</a></div>
-          <div class="meta">📍 ${esc(x.location || "Distrito do Porto")}</div>
-          ${tags ? `<div class="tags">${tags}</div>` : ""}
-        </div>
-        <div>
-          <div class="price">€${Number(x.price).toLocaleString("pt-PT")}<small>/mês</small></div>
-          <a class="view" href="${esc(x.url)}" target="_blank" rel="noopener">Ver anúncio →</a>
-        </div>
-      </div>`;
-    }).join("");
+    list.innerHTML = d.listings.map(renderCard).join("");
   }
-  $("log").innerHTML = (d.email_log || []).map(e => {
-    const ok = e.status === "OK";
-    return `<div class="day" title="${esc(e.detail || e.reason || "")}">
-      <div class="d">${esc(e.log_date)}</div>
-      <div class="s"><span class="dot ${ok ? "ok" : "ko"}"></span>${ok ? "OK" : "NOT OK"}${e.listings_count ? " · " + e.listings_count : ""}</div>
-      <div class="r">${esc(e.reason || "")}</div>
-    </div>`;
-  }).join("");
+  $("log").innerHTML = (d.email_log || []).map(renderLogItem).join("");
 }
 
 document.querySelectorAll("#filters select, #filters input").forEach(el => {

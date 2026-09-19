@@ -1,0 +1,156 @@
+{
+  "ok": true,
+  "count": 10,
+  "listings": [
+    {
+      "url": "https://www.imovirtual.com/pt/anuncio/t2-matosinhos-ponte-da-pedra-ID1iTXA",
+      "title": "T2 Matosinhos/ponte da pedra",
+      "source": "Imovirtual",
+      "price": 650,
+      "typology": "T2",
+      "location": "Porto",
+      "sent_date": "2026-09-19",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 1
+    },
+    {
+      "url": "https://www.imovirtual.com/pt/anuncio/aluga-se-t2-c-garagem-ID1iTpH",
+      "title": "Aluga-se T2 C/garagem",
+      "source": "Imovirtual",
+      "price": 1000,
+      "typology": "T2",
+      "location": "Lavra, Perafita, Lavra e Santa Cruz do Bispo, Matosinhos",
+      "sent_date": "2026-09-19",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.idealista.pt/imovel/30263169",
+      "title": "Apartamento T2 na Rua do Zambeze, Paranhos",
+      "source": "Idealista",
+      "price": 1000,
+      "typology": "T2",
+      "location": "Paranhos",
+      "sent_date": "2026-09-19",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.idealista.pt/imovel/35343839",
+      "title": "Moradia independente no Campo 24 de Agosto, Bonfim",
+      "source": "Idealista",
+      "price": 1100,
+      "typology": "T2",
+      "location": "Bonfim",
+      "sent_date": "2026-09-19",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.olx.pt/d/anuncio/t3-renovado-com-garagem-em-matosinhos-ID8x91",
+      "title": "T3 Renovado com Garagem em Matosinhos",
+      "source": "OLX",
+      "price": 1200,
+      "typology": "T3",
+      "location": "Matosinhos",
+      "sent_date": "2026-09-18",
+      "has_pool": 1,
+      "has_purchase_option": 0,
+      "near_sea": 1
+    },
+    {
+      "url": "https://www.remax.pt/imovel/t4-boavista-porto-12345",
+      "title": "T4 Luxo na Boavista com Piscina",
+      "source": "Remax",
+      "price": 1800,
+      "typology": "T4",
+      "location": "Boavista, Porto",
+      "sent_date": "2026-09-18",
+      "has_pool": 1,
+      "has_purchase_option": 1,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.casa-sapo.pt/anuncio/t2-foz-do-douro-ID998",
+      "title": "T2 Foz do Douro Vista Mar",
+      "source": "Casa Sapo",
+      "price": 1400,
+      "typology": "T2",
+      "location": "Foz do Douro, Porto",
+      "sent_date": "2026-09-17",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 1
+    },
+    {
+      "url": "https://www.custojusto.pt/porto/apartamentos/t3-cedofeita-987654",
+      "title": "T3 Achegado ao Centro Cedofeita",
+      "source": "CustoJusto",
+      "price": 1150,
+      "typology": "T3",
+      "location": "Cedofeita, Porto",
+      "sent_date": "2026-09-17",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.era.pt/imovel/t2-vla-nova-de-gaia-1111",
+      "title": "T2 Vila Nova de Gaia com Varanda",
+      "source": "ERA",
+      "price": 850,
+      "typology": "T2",
+      "location": "Vila Nova de Gaia",
+      "sent_date": "2026-09-16",
+      "has_pool": 0,
+      "has_purchase_option": 1,
+      "near_sea": 0
+    },
+    {
+      "url": "https://www.supercasa.pt/venda-apartamento-t3-povoa-de-varzim/id555",
+      "title": "T3 Póvoa de Varzim Beira-Mar",
+      "source": "Supercasa",
+      "price": 950,
+      "typology": "T3",
+      "location": "Póvoa de Varzim",
+      "sent_date": "2026-09-16",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 1
+    }
+  ],
+  "stats": {
+    "total": 270,
+    "coastal": 91,
+    "avg_price": 1240,
+    "min_price": 570
+  },
+  "sources": [
+    "Casa Sapo",
+    "CustoJusto",
+    "ERA",
+    "Idealista",
+    "Imovirtual",
+    "OLX",
+    "Remax",
+    "Supercasa"
+  ],
+  "email_log": [
+    {
+      "log_date": "2026-09-19",
+      "status": "OK",
+      "reason": "15 novos anúncios enviados",
+      "listings_count": 15
+    },
+    {
+      "log_date": "2026-09-18",
+      "status": "OK",
+      "reason": "12 novos anúncios enviados",
+      "listings_count": 12
+    }
+  ]
+}

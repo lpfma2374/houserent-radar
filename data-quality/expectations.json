@@ -1,0 +1,11 @@
+[
+  { "type": "minCount", "value": 50 },
+  { "type": "maxCount", "value": 1000 },
+  { "type": "nonNull", "field": "url" },
+  { "type": "unique", "field": "url" },
+  { "type": "nonNull", "field": "title" },
+  { "type": "nonNull", "field": "price" },
+  { "type": "min", "field": "price", "value": 0 },
+  { "type": "max", "field": "price", "value": 10000 },
+  { "type": "nonNull", "field": "source", "severity": "warn" }
+]
