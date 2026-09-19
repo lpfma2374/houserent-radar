@@ -14,11 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy Preview
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx --yes vercel@latest deploy --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy-production:
     name: Deploy Produção (main)
@@ -27,12 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy Produção
-        id: deployment
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+        run: npx --yes vercel@latest deploy --prod --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       - name: Resumo
-        run: 'echo "Deploy: ${{ steps.deployment.outputs.preview-url }}${{ steps.deployment.outputs.deployment-url }}"'
+        run: 'echo "CI/CD: deploy de produção concluído (main)"'
