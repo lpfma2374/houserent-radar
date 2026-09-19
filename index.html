@@ -69,6 +69,7 @@
   .tag.sea   { background: rgba(0,113,227,.12); color: var(--accent); }
   .tag.pool  { background: rgba(29,122,79,.12); color: #1d7a4f; }
   .tag.buy   { background: rgba(138,97,22,.14); color: #8a6116; }
+  .tag.arch  { background: rgba(110,110,115,.15); color: var(--muted); }
   .item .price { font-size: 22px; font-weight: 700; white-space: nowrap; letter-spacing: -.01em; }
   .item .price small { font-size: 12px; font-weight: 400; color: var(--muted); }
   .item .view { grid-column: 2; font-size: 12px; color: var(--accent); text-decoration: none; text-align: right; }
@@ -106,6 +107,7 @@
     <div class="stat"><div class="label">Junto ao mar</div><div class="value" id="s-coastal">—</div><div class="hint">zonas costeiras</div></div>
     <div class="stat"><div class="label">Preço médio</div><div class="value" id="s-avg">—</div><div class="hint">com filtros actuais</div></div>
     <div class="stat"><div class="label">Melhor preço</div><div class="value" id="s-min">—</div><div class="hint">com filtros actuais</div></div>
+    <div class="stat"><div class="label">Arquivados</div><div class="value" id="s-arch">—</div><div class="hint">meses anteriores</div></div>
   </div>
 
   <div class="filters" id="filters">
@@ -132,6 +134,9 @@
     </div>
     <div class="f toggle">
       <input type="checkbox" id="f-sea"><span>Junto ao mar</span>
+    </div>
+    <div class="f toggle">
+      <input type="checkbox" id="f-arch"><span>Mostrar arquivados</span>
     </div>
     <div class="f">
       <label for="f-sort">Ordenar</label>
@@ -167,6 +172,7 @@ async function load() {
   const q = new URLSearchParams({
     typology: $("f-typ").value, min: $("f-min").value, max: $("f-max").value,
     source: $("f-src").value, coastal: $("f-sea").checked ? "1" : "0",
+    archived: $("f-arch").checked ? "1" : "0",
     sort: $("f-sort").value, limit: "200"
   });
   let d;
@@ -190,13 +196,18 @@ async function load() {
   $("s-coastal").textContent = d.stats.coastal;
   $("s-avg").textContent = "€" + d.stats.avg_price.toLocaleString("pt-PT");
   $("s-min").textContent = "€" + d.stats.min_price.toLocaleString("pt-PT");
-  $("count-sub").textContent = d.count + " anúncios correspondem aos filtros actuais.";
+  $("s-arch").textContent = d.stats.archived;
+  const showingArch = $("f-arch").checked;
+  $("count-sub").textContent = showingArch
+    ? d.count + " anúncios arquivados (meses anteriores)."
+    : d.count + " anúncios correspondem aos filtros actuais.";
   const list = $("list");
   if (!d.listings.length) {
     list.innerHTML = '<div class="empty">Nenhum anúncio corresponde aos filtros actuais.</div>';
   } else {
     list.innerHTML = d.listings.map(x => {
       const tags = [
+        x.archived ? '<span class="tag arch">Archived</span>' : "",
         x.near_sea ? '<span class="tag sea">🌊 Junto ao mar</span>' : "",
         x.has_pool ? '<span class="tag pool">🏊 Piscina</span>' : "",
         x.has_purchase_option ? '<span class="tag buy">🔑 Opção de compra</span>' : ""

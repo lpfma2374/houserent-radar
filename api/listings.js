@@ -37,18 +37,19 @@ export default async function handler(req, res) {
     const typology = sp.get("typology") || "all";
     const source = sp.get("source") || "all";
     const coastal = sp.get("coastal") === "1";
+    const showArchived = sp.get("archived") === "1";
     const sort = ORDER[sp.get("sort")] ? sp.get("sort") : "date";
     const limit = Math.min(parseInt(sp.get("limit") || "200", 10) || 200, 500);
 
-    const where = ["price >= ?", "price <= ?"];
-    const params = [min, max];
+    const where = ["price >= ?", "price <= ?", "archived = ?"];
+    const params = [min, max, showArchived ? 1 : 0];
     if (typology !== "all") { where.push("typology = ?"); params.push(typology); }
     if (source !== "all") { where.push("source = ?"); params.push(source); }
     if (coastal) where.push("near_sea = 1");
     const W = where.join(" AND ");
 
     const listings = await d1(
-      `SELECT url, title, source, price, typology, location, sent_date, has_pool, has_purchase_option, near_sea
+      `SELECT url, title, source, price, typology, location, sent_date, has_pool, has_purchase_option, near_sea, archived, archived_date
        FROM sent_listings WHERE ${W} ORDER BY ${ORDER[sort]} LIMIT ?`,
       [...params, limit]
     );
@@ -60,6 +61,11 @@ export default async function handler(req, res) {
       params
     );
     const stats = statsRows[0] || {};
+
+    const archRows = await d1(
+      `SELECT COUNT(*) AS archived FROM sent_listings WHERE archived = 1`
+    );
+    const archivedTotal = (archRows[0] || {}).archived || 0;
 
     const emailLog = await d1(
       `SELECT log_date, status, reason, detail, listings_count FROM email_log
@@ -78,7 +84,8 @@ export default async function handler(req, res) {
         total: stats.total || 0,
         coastal: stats.coastal || 0,
         avg_price: Math.round(stats.avg_price || 0),
-        min_price: stats.min_price || 0
+        min_price: stats.min_price || 0,
+        archived: archivedTotal
       },
       sources: sources.map(s => s.source),
       email_log: emailLog
