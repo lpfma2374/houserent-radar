@@ -1,5 +1,7 @@
 # HouseRent Radar
 
+**Live**: https://houserent-radar-lpfma2374.vercel.app/
+
 Dashboard de oportunidades de arrendamento no Distrito do Porto, com layout inspirado na Apple e no [Scout Radar](https://scout-radar-dashboard.vercel.app/).
 
 - **Frontend**: HTML + JavaScript puro, sem framework (`index.html`)
