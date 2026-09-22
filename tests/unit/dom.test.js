@@ -32,4 +32,12 @@ describe('index.html — boot e interação DOM em jsdom', () => {
     const w = await boot(fixtureListings, { failApi: true });
     expect(w.document.getElementById('count-sub').textContent).toContain('Erro ao carregar dados');
   });
+  it('renderiza foto do imóvel quando image_url é seguro', async () => {
+    const w = await boot(fixtureListings);
+    const img = w.document.querySelector('.item .photo img');
+    expect(img).not.toBeNull();
+    expect(img.getAttribute('src')).toBe('https://images.example.com/house.jpg');
+    expect(img.getAttribute('loading')).toBe('lazy');
+  });
+
 });

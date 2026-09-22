@@ -12,7 +12,8 @@
       "sent_date": "2026-09-19",
       "has_pool": 0,
       "has_purchase_option": 0,
-      "near_sea": 1
+      "near_sea": 1,
+      "image_url": "https://images.example.com/house.jpg"
     },
     {
       "url": "https://www.imovirtual.com/pt/anuncio/aluga-se-t2-c-garagem-ID1iTpH",

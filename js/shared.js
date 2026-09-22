@@ -38,7 +38,23 @@
     return tags ? `<div class="tags">${tags}</div>` : "";
   };
 
+  const safeImageUrl = (value) => {
+    if (!value) return "";
+    try {
+      const url = new URL(String(value));
+      return url.protocol === "https:" ? url.href : "";
+    } catch (_) {
+      return "";
+    }
+  };
+
   const renderCard = (x) => {
+    const imageUrl = safeImageUrl(x.image_url);
+    const imageHTML = imageUrl
+      ? `<a class="photo" href="${esc(x.url)}" target="_blank" rel="noopener" aria-label="Ver anúncio: ${esc(x.title || "imóvel")}">
+          <img src="${esc(imageUrl)}" alt="Foto de ${esc(x.title || "imóvel")}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.photo').classList.add('photo-error');this.remove()">
+        </a>`
+      : `<div class="photo photo-empty" aria-hidden="true"><span>Sem foto</span></div>`;
     const tags = [
       x.archived ? '<span class="tag arch">Archived</span>' : "",
       x.near_sea ? '<span class="tag sea">🌊 Junto ao mar</span>' : "",
@@ -46,18 +62,19 @@
       x.has_purchase_option ? '<span class="tag buy">🔑 Opção de compra</span>' : ""
     ].filter(Boolean).join("");
     const tagsHTML = tags ? `<div class="tags">${tags}</div>` : "";
-    return `<div class="item">
-        <div>
+    return `<article class="item">
+        ${imageHTML}
+        <div class="item-copy">
           <div class="src">${esc(x.source)} · ${esc(x.typology)} · ${esc(x.sent_date)}</div>
           <div class="title"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title || x.url)}</a></div>
           <div class="meta">📍 ${esc(x.location || "Distrito do Porto")}</div>
           ${tagsHTML}
         </div>
-        <div>
+        <div class="item-action">
           <div class="price">€${Number(x.price).toLocaleString("pt-PT")}<small>/mês</small></div>
           <a class="view" href="${esc(x.url)}" target="_blank" rel="noopener">Ver anúncio →</a>
         </div>
-      </div>`;
+      </article>`;
   };
 
   const renderLogItem = (e) => {
@@ -74,6 +91,7 @@
     formatPrice,
     formatSource,
     renderTags,
+    safeImageUrl,
     renderCard,
     renderLogItem
   };

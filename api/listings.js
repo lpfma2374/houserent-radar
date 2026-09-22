@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     const W = where.join(" AND ");
 
     const listings = await d1(
-      `SELECT url, title, source, price, typology, location, sent_date, has_pool, has_purchase_option, near_sea, archived, archived_date
+      `SELECT url, title, source, price, typology, location, sent_date, has_pool, has_purchase_option, near_sea, image_url, archived, archived_date
        FROM sent_listings WHERE ${W} ORDER BY ${ORDER[sort]} LIMIT ?`,
       [...params, limit]
     );
