@@ -122,6 +122,21 @@
       "has_pool": 0,
       "has_purchase_option": 0,
       "near_sea": 1
+    },
+    {
+      "url": "https://www.idealista.pt/imovel/arquivado-1/",
+      "title": "Anúncio arquivado",
+      "source": "Imovirtual",
+      "price": 900,
+      "typology": "T2",
+      "location": "Porto",
+      "sent_date": "2026-09-19",
+      "has_pool": 0,
+      "has_purchase_option": 0,
+      "near_sea": 0,
+      "image_url": "https://images.example.com/house.jpg",
+      "archived": 1,
+      "archived_date": "2026-09-01"
     }
   ],
   "stats": {

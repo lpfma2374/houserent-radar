@@ -125,3 +125,35 @@ describe('renderLogItem — email log entry rendering', () => {
     expect(html).toContain('ko');
   });
 });
+
+describe('applyFilters / computeStats', () => {
+  const rows = [
+    { price: 900, archived: 0, typology: 'T2', source: 'OLX', near_sea: 1, sent_date: '2026-09-28' },
+    { price: 700, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, sent_date: '2026-09-28' },
+    { price: 1500, archived: 0, typology: 'T3', source: 'Idealista', near_sea: 1, sent_date: '2026-09-29' },
+    { price: 2500, archived: 0, typology: 'T3', source: 'OLX', near_sea: 0, sent_date: '2026-09-29' },
+    { price: 800, archived: 1, typology: 'T2', source: 'OLX', near_sea: 0, sent_date: '2026-09-01' }
+  ];
+  const base = { typology: 'all', source: 'all', min: '500', max: '2000', coastal: false, archived: false, sort: 'date' };
+
+  it('aplica preço, exclui arquivados e ordena por data e preço', () => {
+    expect(S.applyFilters(rows, base).map((x) => x.price)).toEqual([1500, 700, 900]);
+  });
+
+  it('combina tipologia, portal e junto ao mar', () => {
+    expect(S.applyFilters(rows, { ...base, typology: 'T2' })).toHaveLength(2);
+    expect(S.applyFilters(rows, { ...base, source: 'Idealista' })).toHaveLength(1);
+    expect(S.applyFilters(rows, { ...base, coastal: true }).map((x) => x.price)).toEqual([1500, 900]);
+  });
+
+  it('ordena por preço e mostra só arquivados quando pedido', () => {
+    expect(S.applyFilters(rows, { ...base, sort: 'price_desc' })[0].price).toBe(1500);
+    expect(S.applyFilters(rows, { ...base, archived: true })).toHaveLength(1);
+  });
+
+  it('calcula estatísticas sobre os filtrados e arquivados sobre o total', () => {
+    const f = S.applyFilters(rows, base);
+    expect(S.computeStats(f, rows)).toEqual({ total: 3, coastal: 2, avg_price: 1033, min_price: 700, archived: 1 });
+    expect(S.computeStats([], rows)).toEqual({ total: 0, coastal: 0, avg_price: 0, min_price: 0, archived: 1 });
+  });
+});

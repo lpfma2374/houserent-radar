@@ -6,8 +6,8 @@ test.describe('HouseRent Radar (index.html) — testes de leitura E2E', () => {
     await mockApi(page);
     await page.goto('/');
     await expect(page.locator('.item')).toHaveCount(10);
-    await expect(page.locator('#s-total')).toHaveText('270');
-    await expect(page.locator('#s-coastal')).toHaveText('91');
+    await expect(page.locator('#s-total')).toHaveText('10');
+    await expect(page.locator('#s-coastal')).toHaveText('4');
     await expect(page.locator('#count-sub')).toContainText('10 anúncios correspondem');
   });
 
