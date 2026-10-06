@@ -33,6 +33,7 @@
       x.archived ? '<span class="tag arch">Archived</span>' : "",
       x.near_sea ? '<span class="tag sea">🌊 Junto ao mar</span>' : "",
       x.has_pool ? '<span class="tag pool">🏊 Piscina</span>' : "",
+      x.has_condo_pool ? '<span class="tag pool">🏡 Condomínio fechado</span>' : "",
       x.has_purchase_option ? '<span class="tag buy">🔑 Opção de compra</span>' : ""
     ].filter(Boolean).join("");
     return tags ? `<div class="tags">${tags}</div>` : "";
@@ -59,6 +60,7 @@
       x.archived ? '<span class="tag arch">Archived</span>' : "",
       x.near_sea ? '<span class="tag sea">🌊 Junto ao mar</span>' : "",
       x.has_pool ? '<span class="tag pool">🏊 Piscina</span>' : "",
+      x.has_condo_pool ? '<span class="tag pool">🏡 Condomínio fechado</span>' : "",
       x.has_purchase_option ? '<span class="tag buy">🔑 Opção de compra</span>' : ""
     ].filter(Boolean).join("");
     const tagsHTML = tags ? `<div class="tags">${tags}</div>` : "";
@@ -102,7 +104,8 @@
       Number(x.archived || 0) === arch &&
       (!f.typology || f.typology === "all" || x.typology === f.typology) &&
       (!f.source || f.source === "all" || x.source === f.source) &&
-      (!f.coastal || Number(x.near_sea) === 1)
+      (!f.coastal || Number(x.near_sea) === 1) &&
+      (!f.condoPool || Number(x.has_condo_pool) === 1)
     ).sort(SORTS[f.sort] || SORTS.date);
   };
 

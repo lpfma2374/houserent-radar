@@ -7,7 +7,7 @@ const CF_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
 // A tabela e pequena e so muda uma vez por dia, por isso filtros e estatisticas
 // fazem-se em memoria.
 const ALL_SQL = `SELECT url, title, source, price, typology, location, sent_date, has_pool,
-  has_purchase_option, near_sea, image_url, archived, archived_date
+  has_purchase_option, near_sea, image_url, has_condo_pool, archived, archived_date
   FROM sent_listings ORDER BY sent_date DESC, price ASC;
 SELECT log_date, status, reason, detail, listings_count FROM email_log
   ORDER BY log_date DESC, created_at DESC LIMIT 7`;
@@ -73,6 +73,7 @@ export default async function handler(req, res) {
     const typology = sp.get("typology") || "all";
     const source = sp.get("source") || "all";
     const coastal = sp.get("coastal") === "1";
+    const condoPool = sp.get("condoPool") === "1";
     const showArchived = sp.get("archived") === "1";
     const sort = SORTS[sp.get("sort")] ? sp.get("sort") : "date";
     const limit = Math.min(parseInt(sp.get("limit") || "200", 10) || 200, 500);
@@ -81,7 +82,8 @@ export default async function handler(req, res) {
       x.price >= min && x.price <= max && x.archived === (showArchived ? 1 : 0) &&
       (typology === "all" || x.typology === typology) &&
       (source === "all" || x.source === source) &&
-      (!coastal || x.near_sea === 1)
+      (!coastal || x.near_sea === 1) &&
+      (!condoPool || x.has_condo_pool === 1)
     ).sort(SORTS[sort]);
     const prices = filtered.map((x) => x.price);
 

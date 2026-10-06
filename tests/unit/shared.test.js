@@ -43,15 +43,16 @@ describe('formatSource — source portal capitalization', () => {
 
 describe('renderTags — badge tags rendering', () => {
   it('renders near_sea, pool, and purchase option tags', () => {
-    const item = { near_sea: 1, has_pool: 1, has_purchase_option: 1 };
+    const item = { near_sea: 1, has_pool: 1, has_purchase_option: 1, has_condo_pool: 1 };
     const html = S.renderTags(item);
     expect(html).toContain('Junto ao mar');
     expect(html).toContain('Piscina');
     expect(html).toContain('Opção de compra');
+    expect(html).toContain('Condomínio fechado');
   });
 
   it('returns empty string if no flags active', () => {
-    const item = { near_sea: 0, has_pool: 0, has_purchase_option: 0 };
+    const item = { near_sea: 0, has_pool: 0, has_purchase_option: 0, has_condo_pool: 0 };
     expect(S.renderTags(item)).toBe('');
   });
 
@@ -144,6 +145,15 @@ describe('applyFilters / computeStats', () => {
     expect(S.applyFilters(rows, { ...base, typology: 'T2' })).toHaveLength(2);
     expect(S.applyFilters(rows, { ...base, source: 'Idealista' })).toHaveLength(1);
     expect(S.applyFilters(rows, { ...base, coastal: true }).map((x) => x.price)).toEqual([1500, 900]);
+  });
+
+  it('filtra por condominio fechado com piscina quando condoPool esta activo', () => {
+    const condoRows = [
+      { price: 1200, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, has_condo_pool: 1, sent_date: '2026-10-06' },
+      { price: 900, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, has_condo_pool: 0, sent_date: '2026-10-06' }
+    ];
+    expect(S.applyFilters(condoRows, { ...base, condoPool: true }).map((x) => x.price)).toEqual([1200]);
+    expect(S.applyFilters(condoRows, base)).toHaveLength(2);
   });
 
   it('ordena por preço e mostra só arquivados quando pedido', () => {

@@ -148,6 +148,9 @@
       <input type="checkbox" id="f-sea"><span>Junto ao mar</span>
     </div>
     <div class="f toggle">
+      <input type="checkbox" id="f-condo"><span>Condomínio fechado c/ piscina</span>
+    </div>
+    <div class="f toggle">
       <input type="checkbox" id="f-arch"><span>Mostrar arquivados</span>
     </div>
     <div class="f">
@@ -171,7 +174,7 @@
 
   <footer>
     HouseRent Radar · Dados via Cloudflare D1 · Serverless Vercel<br>
-    Pesquisa diária às 8h em 10 portais · Critérios: T2–T4 · €500–2000/mês · prioridade zonas costeiras
+    Pesquisa a pedido em 10 portais · Critérios: T2–T4 · €500–2000/mês · prioridade zonas costeiras · condomínios fechados com piscina
   </footer>
 </div>
 
@@ -186,6 +189,7 @@ let ALL = null;
 const readFilters = () => ({
   typology: $("f-typ").value, min: $("f-min").value, max: $("f-max").value,
   source: $("f-src").value, coastal: $("f-sea").checked,
+  condoPool: $("f-condo").checked,
   archived: $("f-arch").checked, sort: $("f-sort").value
 });
 
