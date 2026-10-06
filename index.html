@@ -144,6 +144,10 @@
       <label for="f-src">Portal</label>
       <select id="f-src"><option value="all">Todos</option></select>
     </div>
+    <div class="f">
+      <label for="f-city">Cidade</label>
+      <select id="f-city"><option value="all">Todas</option></select>
+    </div>
     <div class="f toggle">
       <input type="checkbox" id="f-sea"><span>Junto ao mar</span>
     </div>
@@ -180,7 +184,7 @@
 
 <script src="js/shared.js"></script>
 <script>
-const { formatPrice, formatSource, renderCard, renderLogItem, applyFilters, computeStats } = window.HouseRentShared;
+const { formatPrice, formatSource, renderCard, renderLogItem, applyFilters, computeStats, normalizeCity } = window.HouseRentShared;
 const $ = id => document.getElementById(id);
 const CACHE_KEY = "houserent-radar:all:v1";
 const LIMIT = 200;
@@ -188,7 +192,7 @@ let ALL = null;
 
 const readFilters = () => ({
   typology: $("f-typ").value, min: $("f-min").value, max: $("f-max").value,
-  source: $("f-src").value, coastal: $("f-sea").checked,
+  source: $("f-src").value, city: $("f-city").value, coastal: $("f-sea").checked,
   condoPool: $("f-condo").checked,
   archived: $("f-arch").checked, sort: $("f-sort").value
 });
@@ -200,6 +204,18 @@ function fillSources(values) {
   for (const s of values) {
     const o = document.createElement("option");
     o.value = s; o.textContent = formatSource(s);
+    sel.appendChild(o);
+  }
+  sel.value = [...sel.options].some(o => o.value === current) ? current : "all";
+}
+
+function fillLocations(values) {
+  const sel = $("f-city");
+  const current = sel.value;
+  sel.length = 1; // mantem a opcao "Todas"
+  for (const c of values) {
+    const o = document.createElement("option");
+    o.value = c; o.textContent = c;
     sel.appendChild(o);
   }
   sel.value = [...sel.options].some(o => o.value === current) ? current : "all";
@@ -227,6 +243,7 @@ function render() {
 function useData(d) {
   ALL = d.listings || [];
   fillSources(d.sources && d.sources.length ? d.sources : [...new Set(ALL.map(x => x.source).filter(Boolean))].sort());
+  fillLocations([...new Set(ALL.map((x) => normalizeCity(x.location)).filter(Boolean))].sort());
   $("log").innerHTML = (d.email_log || []).map(renderLogItem).join("");
   render();
 }

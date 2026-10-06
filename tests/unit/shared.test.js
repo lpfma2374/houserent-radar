@@ -147,6 +147,21 @@ describe('applyFilters / computeStats', () => {
     expect(S.applyFilters(rows, { ...base, coastal: true }).map((x) => x.price)).toEqual([1500, 900]);
   });
 
+  it('filtra por cidade via normalizacao de concelho', () => {
+    const cityRows = [
+      { price: 900, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, location: 'Paranhos', sent_date: '2026-10-06' },
+      { price: 700, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, location: 'Senhora da Hora, Matosinhos', sent_date: '2026-10-06' },
+      { price: 800, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, location: 'Canidelo', sent_date: '2026-10-06' }
+    ];
+    expect(S.normalizeCity('Paranhos')).toBe('Porto');
+    expect(S.normalizeCity('Senhora da Hora, Matosinhos')).toBe('Matosinhos');
+    expect(S.normalizeCity('Canidelo')).toBe('Vila Nova de Gaia');
+    expect(S.normalizeCity('Póvoa De Varzim, Beiriz E Argivai')).toBe('Póvoa de Varzim');
+    expect(S.applyFilters(cityRows, { ...base, city: 'Porto' })).toHaveLength(1);
+    expect(S.applyFilters(cityRows, { ...base, city: 'Matosinhos' })).toHaveLength(1);
+    expect(S.applyFilters(cityRows, { ...base, city: 'all' })).toHaveLength(3);
+  });
+
   it('filtra por condominio fechado com piscina quando condoPool esta activo', () => {
     const condoRows = [
       { price: 1200, archived: 0, typology: 'T2', source: 'OLX', near_sea: 0, has_condo_pool: 1, sent_date: '2026-10-06' },

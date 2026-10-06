@@ -95,6 +95,22 @@
     price_desc: (a, b) => b.price - a.price
   };
 
+  // Normaliza a freguesia/local do anuncio para o concelho (Cidade do filtro)
+  const normalizeCity = (value) => {
+    const t = String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    if (!t) return "";
+    const has = (...words) => words.some((w) => t.includes(w));
+    if (has("matosinhos", "leca", "senhora da hora", "custoias", "guifoes", "pedroucos", "perafita", "lavra", "santa cruz do bispo")) return "Matosinhos";
+    if (has("vila do conde", "conde")) return "Vila do Conde";
+    if (has("povoa")) return "Póvoa de Varzim";
+    if (has("gaia", "canidelo", "mafamude", "oliveira do douro", "vilar do paraiso", "madalena", "gulpilhares", "vila nova")) return "Vila Nova de Gaia";
+    if (has("gondomar", "rio tinto", "valbom", "jovim", "sao cosme", "fanzeres", "baguim", "covelo")) return "Gondomar";
+    if (has("ermesinde", "valongo", "alfena", "sobreira")) return "Valongo";
+    if (has("espinho")) return "Espinho";
+    if (has("maia")) return "Maia";
+    if (has("porto", "paranhos", "cedofeita", "bonfim", "lordelo", "campanha", "ramalde", "aldoar", "nevogilde", "massarelos", "miragaia", "sao nicolau", "vitoria", "santo ildefonso", "foz do douro", "areosa", "campo alegre")) return "Porto";
+    return "Outros";
+  };
   const applyFilters = (rows, f) => {
     const min = Number(f.min) || 0;
     const max = f.max === "" || f.max == null ? Infinity : Number(f.max);
@@ -105,7 +121,8 @@
       (!f.typology || f.typology === "all" || x.typology === f.typology) &&
       (!f.source || f.source === "all" || x.source === f.source) &&
       (!f.coastal || Number(x.near_sea) === 1) &&
-      (!f.condoPool || Number(x.has_condo_pool) === 1)
+      (!f.condoPool || Number(x.has_condo_pool) === 1) &&
+      (!f.city || f.city === "all" || normalizeCity(x.location) === f.city)
     ).sort(SORTS[f.sort] || SORTS.date);
   };
 
@@ -122,6 +139,7 @@
 
   return {
     applyFilters,
+    normalizeCity,
     computeStats,
     esc,
     formatPrice,
